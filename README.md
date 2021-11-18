@@ -31,3 +31,7 @@ $ sbatch test.sh
 $ bash predict.sh
 ```
 とすると，震源の座標$x=30$，$y=30$，深さ20km，マグニチュード8での予測が始まります．結果はAIディレクトリの中に，`predicted_data.csv`として出力されます．震源の座標等は，`predict.sh`の中身を変更して変えることができます．
+
+## アプリについて
+
+アプリについては，appディレクトリ内に別にreadmeが書かれています．[こちら](https://github.com/H-Mitarai-eeic/Earthquaker/tree/main/app#earthquaker%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6)
