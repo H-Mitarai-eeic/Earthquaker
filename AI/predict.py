@@ -40,7 +40,6 @@ def main():
     inputs = torch.zeros(1, 2, len_data, len_data)
     for i in range(int(args.x)-10, int(args.x)+11):
         for j in range(int(args.y)-10, int(args.y)+11):
-            print(i,j)
             if 0 <= i < len_data and 0 <= j < len_data:
                 inputs[0][0][i][j] = float(args.depth) / 1000
                 inputs[0][1][i][j] = float(args.magnitude) / 10
@@ -54,6 +53,7 @@ def main():
     with open('predicted_data.csv', 'w') as file:
         writer = csv.writer(file, lineterminator=',')
         writer.writerows(pre_list)
+    print("predicted_data.csv is created!")
 
 
 if __name__ == '__main__':
