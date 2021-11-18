@@ -10,14 +10,12 @@ from torchvision import datasets, transforms
 import sys
 
 # from network import CifarCNN
-from fcn8s import FCN8s
-from fcn32s import FCN32s
-from myfcn2 import MYFCN2
+from Linear import Linear
 from dataset import MyDataSet
-# from network import EQCNN
+
 
 def main():
-	parser = argparse.ArgumentParser(description='Pytorch example: CIFAR-10')
+	parser = argparse.ArgumentParser(description='Earthquaker')
 	parser.add_argument('--batchsize', '-b', type=int, default=100,
 						help='Number of images in each mini-batch')
 	parser.add_argument('--epoch', '-e', type=int, default=20,
@@ -26,11 +24,11 @@ def main():
 						help='Frequency of taking a snapshot')
 	parser.add_argument('--gpu', '-g', type=int, default=-1,
 						help='GPU ID (negative value indicates CPU)')
-	parser.add_argument('--out', '-o', default='result_myfcn2',
+	parser.add_argument('--out', '-o', default='../result',
 						help='Directory to output the result')
 	parser.add_argument('--resume', '-r', default='',
 						help='Resume the training from snapshot')
-	parser.add_argument('--dataset', '-d', default='data/mini_cifar',
+	parser.add_argument('--dataset', '-d', default='../data',
 						help='Root directory of dataset')
 	args = parser.parse_args()
 
@@ -40,7 +38,7 @@ def main():
 	print('')
 
 	# Set up a neural network to train
-	net = MYFCN2(10)
+	net = Linear(10)
 	# Load designated network weight
 	if args.resume:
 		net.load_state_dict(torch.load(args.resume))
@@ -57,7 +55,7 @@ def main():
 	lr = 1
 	optimizer = optim.Adam(net.parameters(), lr)
 
-	# Load the CIFAR-10
+	# Load the data
 
 	transform = transforms.Compose([transforms.ToTensor()])
 
@@ -162,7 +160,7 @@ def main():
 	ax.set_ylabel("Accuracy [%]")
 	ax.set_ylim(0, 100)
 
-	plt.savefig(args.out + '/accuracy_cifar.png')
+	plt.savefig(args.out + '/accuracy_earthquaker.png')
 	#plt.show()
 
 if __name__ == '__main__':

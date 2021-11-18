@@ -7,20 +7,18 @@ import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 
-from fcn8s import FCN8s
-from fcn32s import FCN32s
 from dataset import MyDataSet
-from myfcn2 import MYFCN2
+from Linear import Linear
 
 def main():
-	parser = argparse.ArgumentParser(description='Pytorch example: CIFAR-10')
+	parser = argparse.ArgumentParser(description='Earthquaker')
 	parser.add_argument('--batchsize', '-b', type=int, default=100,
 						help='Number of images in each mini-batch')
 	parser.add_argument('--gpu', '-g', type=int, default=-1,
 						help='GPU ID (negative value indicates CPU)')
-	parser.add_argument('--model', '-m', default='result/model_final',
+	parser.add_argument('--model', '-m', default='../result/model_final',
 						help='Path to the model for test')
-	parser.add_argument('--dataset', '-d', default='data/mini_cifar',
+	parser.add_argument('--dataset', '-d', default='../data',
 						help='Root directory of dataset')
 	args = parser.parse_args()
 
@@ -29,7 +27,7 @@ def main():
 	print('')
 
 	# Set up a neural network to test
-	net = MYFCN2(10)
+	net = Linear(10)
 	# Load designated network weight
 	net.load_state_dict(torch.load(args.model))
 	# Set model to GPU
@@ -39,7 +37,7 @@ def main():
 		device = 'cuda:' + str(args.gpu)
 		net = net.to(device)
 
-	# Load the CIFAR-10
+	# Load the data
 	transform = transforms.Compose([transforms.ToTensor()])
 	testset = MyDataSet(root=args.dataset, train=False, transform=transform)
 	testloader = torch.utils.data.DataLoader(testset, batch_size=args.batchsize,
@@ -59,10 +57,6 @@ def main():
 				labels = labels.to(device)
 			# Forward
 			outputs = net(images)
-			# Predict the label
-			# for i in range(0,255,20):
-			# 	for j in range(0,255,20):
-			# 		print("[{}, {}]".format(i,j), outputs[0, :, i, j])
 
 			_, predicted = torch.max(outputs, 1)
 			# Check whether estimation is right
