@@ -129,3 +129,5 @@ dmypy.json
 .pyre/
 
 result/*
+AI/*.out
+AI/predicted_data.csv
