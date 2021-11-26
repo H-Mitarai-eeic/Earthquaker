@@ -1,4 +1,3 @@
-# eelのインポート
 import eel
 import time
 import ntplib
@@ -8,11 +7,9 @@ import random
 import subprocess
 bitSize = 256
 import os
-# これを書くことでJSからアクセスができます
 
 # path = "/Users/kakeru/Earthquake_AI/UI/eel"
 path = os.path.dirname(__file__)
-# print(path)
 
 
 @eel.expose
