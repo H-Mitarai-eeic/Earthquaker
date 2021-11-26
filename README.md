@@ -42,5 +42,7 @@ $ bash predict.sh
 授業時間外ではあるのですが，Python eelによるアプリ化から，ウェブアプリ化を意識したserver&clientで動く様なUIも作りました．
 appClientAndServerに入っています．
 
+詳しくは[こちら](https://github.com/H-Mitarai-eeic/Earthquaker/tree/main/appClientAndServer#earthquakerhttp%E9%80%9A%E4%BF%A1%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3)
+
 node.jsが入っている場合は，こちらの方が軽量で再現実行が楽だと思われます．
 (ただし，11/26日現在，結果保存機能が壊れている不具合があります．(通信ポリシーに反する的なエラー))
