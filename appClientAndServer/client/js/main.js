@@ -100,6 +100,8 @@ window.onload = () => {
   inputElemDepth.addEventListener('input', rangeOnChange); // スライダー変化時にイベントを発火
   inputElemMag.addEventListener('input', rangeOnChange); // スライダー変化時にイベントを発火
   setCurrentValue(inputElemDepth.value, inputElemMag.value); // ページ読み込み時に値をセット
+  document.getElementById("loadingIcon").style.display = "none";
+
 }
 // <<< for get INPUT <<<
 
@@ -145,7 +147,7 @@ function createFig(mode = "run") {
 
     if (mode == "run") {
       document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + ") Running...</p>";
-
+      document.getElementById("loadingIcon").style.display = "block";
       var param = "x=" + offsetX + "&y=" + offsetY + "&depth=" + inputElemDepth.value + "&mag=" + inputElemMag.value;
       // var serverurl = "http://140d-2405-6580-23e0-af00-9982-7fc4-b262-e89a.ngrok.io?" + param;
       var serverurl = "http://localhost:3000?" + param;
@@ -174,6 +176,7 @@ function createFig(mode = "run") {
             console.log("running...");
 
             document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + ") Finished</p>";
+            document.getElementById("loadingIcon").style.display = "none";
             console.log("finished");
             test_context.fillText("(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + "), 深さ:" + inputElemDepth.value + "km, マグニチュード:" + inputElemMag.value, 10, 20)
             // test_context.fillText("(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + "), Depth=" + inputElemDepth.value, ", Mag=" + inputElemMag.value, 0, 0)
