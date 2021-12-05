@@ -8,6 +8,8 @@ import os
 # path = "/Users/kakeru/Earthquake_AI/UI/eel/web/python"
 path1 = os.path.dirname(__file__)
 
+import pickle
+
 
 def main():
   parser = argparse.ArgumentParser(description='Pytorch example: CIFAR-10')
@@ -30,9 +32,17 @@ def main():
 
   print('')
   # Set up a neural network to test
-  net = MYFCN2(10)
+  # net = MYFCN2(10)
   # Load designated network weight
-  net.load_state_dict(torch.load(args.model, map_location=torch.device('cpu')))
+  # net.load_state_dict(torch.load(args.model, map_location=torch.device('cpu')))
+
+  #
+  # load pickle model
+  #
+
+  with open('./python/model.pickle', mode='rb') as fp:
+    net = pickle.load(fp)
+
   # Set model to GPU
   if args.gpu >= 0:
     # Make a specified GPU current
@@ -71,6 +81,9 @@ def main():
     writer = csv.writer(file, lineterminator=',')
     writer.writerows(pre_list)
   # print(pre_list)
+
+  # with open('model.pickle', mode='wb') as fp:
+  #   pickle.dump(net, fp)
 
 
 if __name__ == '__main__':
