@@ -171,6 +171,7 @@ function createFig(mode = "run") {
 
     if (mode == "run") {
       document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + ") Running...</p>";
+      document.getElementById("fadeLayer").style.visibility = "visible";
       document.getElementById("loadingIcon").style.visibility = "visible";
       var param = "x=" + offsetX + "&y=" + offsetY + "&depth=" + inputElemDepth.value + "&mag=" + inputElemMag.value;
       // var serverurl = "http://140d-2405-6580-23e0-af00-9982-7fc4-b262-e89a.ngrok.io?" + param;
@@ -200,6 +201,7 @@ function createFig(mode = "run") {
             console.log("running...");
 
             document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + ") Finished</p>";
+            document.getElementById("fadeLayer").style.visibility = "hidden";
             document.getElementById("loadingIcon").style.visibility = "hidden";
             console.log("finished");
             test_context.fillText("(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + "), 深さ:" + inputElemDepth.value + "km, マグニチュード:" + inputElemMag.value, 10, 20)
@@ -229,7 +231,7 @@ function createFig(mode = "run") {
 
     if (mode == "pin" || mode == "run") {
       // >>> create × on Map >>>
-      let frameSize = (5 + Number(inputElemMag.value)) * 3 + 1
+      let frameSize = (5 + Number(inputElemMag.value)) * 4 + 1
       const side = 5 + Number(inputElemMag.value)
       let pinColor = 255 * (1 - Number(inputElemDepth.value) / 2000)
       var image_data = test_context.createImageData(1, 1);
