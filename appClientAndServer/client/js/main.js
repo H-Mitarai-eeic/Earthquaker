@@ -1,5 +1,5 @@
-const canvasWidth = 512
-const canvasHeight = 512
+const canvasWidth = 640
+const canvasHeight = 640
 const bitSize = 64
 const gridSize = canvasWidth / bitSize
 
@@ -48,7 +48,31 @@ const color = [
   "#FF570D",
   "#FF4F02"]
 
-colorRed = [
+const myColorList = [
+  "rgb(119,194,229)",
+  "rgb(129,239,125)",
+  "rgb(255,228,9)",
+  "rgb(254,148,6)",
+  "rgb(251,0,6)",
+  "rgb(251,0,6)",
+  "rgb(251, 0, 255)",
+  "rgb(107, 0, 109)"
+]
+
+// const myColorList = [
+//   "rgb(35, 255, 253)",
+//   "rgb(14, 102, 255)",
+//   "rgb(35, 255, 50)",
+//   "rgb(255, 255, 9)",
+//   "rgb(254, 148, 6)",
+//   "rgb(253, 104, 7)",
+//   "rgb(251, 0, 6)",
+//   "rgb(251, 0, 255)",
+//   "rgb(107, 0, 109)"
+// ]
+
+
+const colorRed = [
   "#F8E0E0",
   "#F6CECE",
   "#F5A9A9",
@@ -100,7 +124,7 @@ window.onload = () => {
   inputElemDepth.addEventListener('input', rangeOnChange); // スライダー変化時にイベントを発火
   inputElemMag.addEventListener('input', rangeOnChange); // スライダー変化時にイベントを発火
   setCurrentValue(inputElemDepth.value, inputElemMag.value); // ページ読み込み時に値をセット
-  document.getElementById("loadingIcon").style.display = "none";
+  // document.getElementById("loadingIcon").style.display = "none";
 
 }
 // <<< for get INPUT <<<
@@ -147,7 +171,7 @@ function createFig(mode = "run") {
 
     if (mode == "run") {
       document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + ") Running...</p>";
-      document.getElementById("loadingIcon").style.display = "block";
+      document.getElementById("loadingIcon").style.visibility = "visible";
       var param = "x=" + offsetX + "&y=" + offsetY + "&depth=" + inputElemDepth.value + "&mag=" + inputElemMag.value;
       // var serverurl = "http://140d-2405-6580-23e0-af00-9982-7fc4-b262-e89a.ngrok.io?" + param;
       var serverurl = "http://localhost:3000?" + param;
@@ -176,7 +200,7 @@ function createFig(mode = "run") {
             console.log("running...");
 
             document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + ") Finished</p>";
-            document.getElementById("loadingIcon").style.display = "none";
+            document.getElementById("loadingIcon").style.visibility = "hidden";
             console.log("finished");
             test_context.fillText("(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + "), 深さ:" + inputElemDepth.value + "km, マグニチュード:" + inputElemMag.value, 10, 20)
             // test_context.fillText("(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + "), Depth=" + inputElemDepth.value, ", Mag=" + inputElemMag.value, 0, 0)
@@ -184,7 +208,9 @@ function createFig(mode = "run") {
               for (var y = 0; y < bitSize; y++) {
                 let data_i = Number(datalist[y * bitSize + x])
                 if (data_i > 0) {
-                  test_context.fillStyle = colorRed[data_i + 2];
+                  test_context.fillStyle = myColorList[Math.min(data_i - 1, myColorList.length - 1)];
+                  // test_context.fillStyle = colorRed[data_i + 2];
+
                   test_context.fillRect(x * gridSize, y * gridSize, gridSize, gridSize);
                   test_context.font = gridSize - 2 + 'px';
                   test_context.fillStyle = "black"
