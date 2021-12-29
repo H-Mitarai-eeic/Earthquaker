@@ -5,11 +5,11 @@ const gridSize = canvasWidth / bitSize
 
 let notRuninng = true
 
-const longtitudeMax = 46
-// const longtitudeMin = 30
-const longtitudeSpan = 16
-const latitudeMin = 128
-const latitudeSpan = 18
+const latitudeMax = 46
+// const latitudeMin = 30
+const latitudeSpan = 16
+const longtitudeMin = 128
+const longtitudeSpan = 18
 
 const canvas = document.getElementById("test_canvas");
 // var test_context = document.getElementById('test_canvas').getContext('2d');
@@ -90,11 +90,11 @@ const colorRed = [
 const currentValueDepth = document.getElementById('currentDepth'); // 埋め込む先のspan要素  
 const currentValueMag = document.getElementById('currentMag'); // 埋め込む先のspan要素
 
-function pixelXtoLatitude(X) {
-  return Math.round(latitudeMin + X * latitudeSpan / bitSize);
+function pixelXtolongtitude(X) {
+  return Math.round(longtitudeMin + X * longtitudeSpan / bitSize);
 }
-function pixelYtoLongtitude(Y) {
-  return Math.round(longtitudeMax - Y * longtitudeSpan / bitSize);
+function pixelYtolatitude(Y) {
+  return Math.round(latitudeMax - Y * latitudeSpan / bitSize);
 }
 
 // >>> for get INPUT >>>
@@ -105,13 +105,13 @@ function getPosition(e) {
   offsetY = Math.floor(offsetY / gridSize)
   createFig(mode = "pin")
   console.log(offsetX, offsetY, Number(inputElemDepth.value), Number(inputElemMag.value))
-  document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + ")</p>";
+  document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtolongtitude(offsetX) + "," + pixelYtolatitude(offsetY) + ")</p>";
   // document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + offsetX + "," + offsetY + ")</p>";
 }
 
 // 現在の値をspanに埋め込む関数
 const setCurrentValue = (val1, val2) => {
-  currentValueDepth.innerText = val1;
+  currentValueDepth.innerText = val;
   currentValueMag.innerText = val2;
 }
 
@@ -132,32 +132,32 @@ window.onload = () => {
 
 
 function setKanto() {
-  offsetX = Math.round((139 - latitudeMin) * bitSize / latitudeSpan);
-  offsetY = Math.round((longtitudeMax - 35) * bitSize / longtitudeSpan);
+  offsetX = Math.round((139 - longtitudeMin) * bitSize / longtitudeSpan);
+  offsetY = Math.round((latitudeMax - 35) * bitSize / latitudeSpan);
   inputElemDepth.value = 25;
   inputElemMag.value = 7.9;
   createFig(mode = "pin");
-  document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + ")</p>";
+  document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtolongtitude(offsetX) + "," + pixelYtolatitude(offsetY) + ")</p>";
   setCurrentValue(inputElemDepth.value, inputElemMag.value); // ページ読み込み時に値をセット
 }
 
 function setHigashinihon() {
-  offsetX = Math.round((142 - latitudeMin) * bitSize / latitudeSpan);
-  offsetY = Math.round((longtitudeMax - 38) * bitSize / longtitudeSpan);
+  offsetX = Math.round((142 - longtitudeMin) * bitSize / longtitudeSpan);
+  offsetY = Math.round((latitudeMax - 38) * bitSize / latitudeSpan);
   inputElemDepth.value = 24;
   inputElemMag.value = 9;
   createFig(mode = "pin");
-  document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + ")</p>";
+  document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtolongtitude(offsetX) + "," + pixelYtolatitude(offsetY) + ")</p>";
   setCurrentValue(inputElemDepth.value, inputElemMag.value); // ページ読み込み時に値をセット
 }
 
 function setNankai() {
-  offsetX = Math.round((134 - latitudeMin) * bitSize / latitudeSpan);
-  offsetY = Math.round((longtitudeMax - 33) * bitSize / longtitudeSpan);
+  offsetX = Math.round((134 - longtitudeMin) * bitSize / longtitudeSpan);
+  offsetY = Math.round((latitudeMax - 33) * bitSize / latitudeSpan);
   inputElemDepth.value = 35;
   inputElemMag.value = 9;
   createFig(mode = "pin");
-  document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + ")</p>";
+  document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtolongtitude(offsetX) + "," + pixelYtolatitude(offsetY) + ")</p>";
   setCurrentValue(inputElemDepth.value, inputElemMag.value); // ページ読み込み時に値をセット
 }
 
@@ -172,7 +172,7 @@ function createFig(mode = "run") {
   if (mode == "run") {
 
 
-    document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + ") Running...</p>";
+    document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtolongtitude(offsetX) + "," + pixelYtolatitude(offsetY) + ") Running...</p>";
     document.getElementById("fadeLayer").style.visibility = "visible";
     document.getElementById("loadingIcon").style.visibility = "visible";
     var param = "x=" + offsetX + "&y=" + offsetY + "&depth=" + inputElemDepth.value + "&mag=" + inputElemMag.value;
@@ -202,12 +202,12 @@ function createFig(mode = "run") {
           }
           console.log("running...");
 
-          document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + ") Finished</p>";
+          document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtolongtitude(offsetX) + "," + pixelYtolatitude(offsetY) + ") Finished</p>";
           document.getElementById("fadeLayer").style.visibility = "hidden";
           document.getElementById("loadingIcon").style.visibility = "hidden";
           console.log("finished");
-          // test_context.fillText("(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + "), 深さ:" + inputElemDepth.value + "km, マグニチュード:" + inputElemMag.value, 10, 20)
-          // test_context.fillText("(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + "), Depth=" + inputElemDepth.value, ", Mag=" + inputElemMag.value, 0, 0)
+          // test_context.fillText("(経度,緯度)=(" + pixelXtolongtitude(offsetX) + "," + pixelYtolatitude(offsetY) + "), 深さ:" + inputElemDepth.value + "km, マグニチュード:" + inputElemMag.value, 10, 20)
+          // test_context.fillText("(経度,緯度)=(" + pixelXtolongtitude(offsetX) + "," + pixelYtolatitude(offsetY) + "), Depth=" + inputElemDepth.value, ", Mag=" + inputElemMag.value, 0, 0)
           svg.selectAll("rect").remove();
 
 
@@ -219,18 +219,16 @@ function createFig(mode = "run") {
 
                 // >>> show sindo >>>
 
-                var ido = (latitudeSpan / bitSize) * x + 30;
-                var keido = (longtitudeSpan / bitSize) * y + 128;
+                var ido = (latitudeSpan / bitSize) * (bitSize - y) + 30;
+                var keido = (longtitudeSpan / bitSize) * x + 128;
                 // console.log(projection(getPosOnMap(x, y)));
                 var circle = svg
                   .append("circle")
                   .attr("cx", function () {
                     return projection([keido, ido])[0];
-                    return projection(getPosOnMap(x, y))[0];
                   })
                   .attr("cy", function () {
                     return projection([keido, ido])[1];
-                    return projection(getPosOnMap(x, y))[1];
                   })
                   .attr("fill", function () {
                     return myColorList[Math.min(data_i - 1, myColorList.length - 1)];
@@ -364,7 +362,7 @@ function saveCanvas(canvas_id) {
   //canvasをJPEG変換し、そのBase64文字列をhrefへセット
   a.href = canvas.toDataURL('image/jpeg', 0.85);
   //ダウンロード時のファイル名を指定
-  a.download = 'EarthquakeData' + 'X' + pixelXtoLatitude(offsetX) + 'Y' + pixelYtoLongtitude(offsetY) + 'Depth' + inputElemDepth.value + 'Mag' + inputElemMag.value + '.jpg';
+  a.download = 'EarthquakeData' + 'X' + pixelXtolongtitude(offsetX) + 'Y' + pixelYtolatitude(offsetY) + 'Depth' + inputElemDepth.value + 'Mag' + inputElemMag.value + '.jpg';
   //クリックイベントを発生させる
   a.click();
 }
@@ -372,8 +370,8 @@ function saveCanvas(canvas_id) {
 // input x, y (x, y in [0,63])
 // output [ido, keido]
 function getPosOnMap(x, y) {
-  var ido = (longtitudeSpan / bitSize) * x + 30;
-  var keido = (latitudeSpan / bitSize) * y + 128;
+  var ido = (latitudeSpan / bitSize) * x + 30;
+  var keido = (longtitudeSpan / bitSize) * y + 128;
   console.log(ido, keido)
-  return (longtitudeSpan / bitSize) * x + 30, (latitudeSpan / bitSize) * y + 128;
+  return (latitudeSpan / bitSize) * x + 30, (longtitudeSpan / bitSize) * y + 128;
 }
