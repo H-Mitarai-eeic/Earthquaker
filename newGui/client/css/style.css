@@ -29,11 +29,11 @@ html h1 {
   color: rgb(160, 245, 95);
   /* color: #333; */
   font-weight: 500;
-  font-size: 400%;
+  font-size: 300%;
 }
 
 html h2 {
-  font-size: 150%;
+  font-size: 120%;
 }
 
 html h3 {
@@ -61,7 +61,7 @@ html input[type="range"] {
   outline: 0;
   border: 0;
   border-radius: 500px;
-  width: 400px;
+  width: 300px;
   max-width: 100%;
   margin: 10px 0 16px;
   transition: box-shadow 0.2s ease-in-out;
@@ -177,15 +177,15 @@ input:not(:active) + #h4-container h4 {
   border-radius: 20px;
   border: 2px solid rgb(0, 202, 199);
   background: rgb(0, 202, 199);
-  font-size: 20px;
+  font-size: 120%;
 }
 .css-button-fully-rounded--red:hover {
   background: #fff;
   color: rgb(0, 202, 199);
 }
 #buttonRun {
-  min-width: 250px;
-  height: 100px;
+  min-width: 200px;
+  height: 80px;
   color: #fff;
   padding: 5px 10px;
   /* font-weight: bold; */
@@ -197,7 +197,7 @@ input:not(:active) + #h4-container h4 {
   border-radius: 20px;
   border: 2px solid rgb(0, 202, 199);
   background: rgb(0, 202, 199);
-  font-size: 35px;
+  font-size: 150%;
 }
 #buttonRun:hover {
   background: #fff;
@@ -218,59 +218,11 @@ input:not(:active) + #h4-container h4 {
   border-radius: 20px;
   border: 2px solid rgb(160, 245, 95);
   background: rgb(160, 245, 95);
-  font-size: 18px;
+  font-size: 100%;
 }
 #saveFig:hover {
   background: rgb(1, 19, 36);
   color: rgb(160, 245, 95);
-}
-
-/* 凡例 */
-/*リスト本体の設定*/
-li {
-  list-style-type: none;
-  margin: 2px;
-  padding: 0.5em 0.5em 0.5em 0.5em;
-  /* background: white; */
-  border-color: white;
-  border-style: none none dotted none;
-  width: 300px;
-}
-
-/*リストの各要素に前要素として■を付ける*/
-li:before {
-  content: "";
-  display: inline-block;
-  height: 15px;
-  width: 15px;
-  margin-right: 5px;
-}
-
-/*リストの各要素の前要素のデザインを設定*/
-li.series1:before {
-  background: rgba(245, 177, 46, 0.8);
-  border-radius: 10;
-}
-li.series2:before {
-  background: rgba(25, 0, 179, 0.8);
-  border-radius: 10;
-}
-li.series3:before {
-  background: rgba(173, 21, 0, 0.8);
-  border-radius: 10;
-}
-
-li.series4:before {
-  background: #9696d5;
-  border-radius: 2;
-}
-li.series5:before {
-  background: #da2550;
-  border-radius: 2;
-}
-li.series6:before {
-  background: #341f47;
-  border-radius: 2;
 }
 
 /* for loding */

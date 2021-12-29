@@ -1,5 +1,5 @@
-const canvasWidth = 640
-const canvasHeight = 640
+const canvasWidth = 512
+const canvasHeight = 512
 const bitSize = 64
 const gridSize = canvasWidth / bitSize
 
@@ -12,8 +12,8 @@ const latitudeMin = 128
 const latitudeSpan = 18
 
 const canvas = document.getElementById("test_canvas");
-var test_context = document.getElementById('test_canvas').getContext('2d');
-let imagePath = "../fig/japan.png";
+// var test_context = document.getElementById('test_canvas').getContext('2d');
+// let imagePath = "../fig/japan.png";
 
 canvas.style.border = "5px solid rgb(149, 247, 245)";
 
@@ -164,100 +164,194 @@ function setNankai() {
 function createFig(mode = "run") {
   console.log("draw");
   const image = new Image();
-  image.addEventListener("load", function () {
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-    console.log("load!");
+  // image.addEventListener("load", function () {
+  // const ctx = canvas.getContext("2d");
+  // ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+  console.log("load!");
 
-    if (mode == "run") {
-      document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + ") Running...</p>";
-      document.getElementById("fadeLayer").style.visibility = "visible";
-      document.getElementById("loadingIcon").style.visibility = "visible";
-      var param = "x=" + offsetX + "&y=" + offsetY + "&depth=" + inputElemDepth.value + "&mag=" + inputElemMag.value;
-      // var serverurl = "http://140d-2405-6580-23e0-af00-9982-7fc4-b262-e89a.ngrok.io?" + param;
-      var serverurl = "http://localhost:3000?" + param;
-      $.ajax({
-        type: "GET",
-        url: serverurl,
-        // dataType: "json"
-      })
-        // Ajaxリクエストが成功した場合
-        .done(function (data) {
-          // $("#result").html(data);
-          datalist = data.split(",")
-          console.log("got:", data)
-          if (datalist[0] != offsetX + "+" + offsetY + "+" + inputElemDepth.value + "+" + inputElemMag.value) {
-            console.log("retry");
-            createFig();
+  if (mode == "run") {
+
+
+    document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + ") Running...</p>";
+    document.getElementById("fadeLayer").style.visibility = "visible";
+    document.getElementById("loadingIcon").style.visibility = "visible";
+    var param = "x=" + offsetX + "&y=" + offsetY + "&depth=" + inputElemDepth.value + "&mag=" + inputElemMag.value;
+    // var serverurl = "http://140d-2405-6580-23e0-af00-9982-7fc4-b262-e89a.ngrok.io?" + param;
+    var serverurl = "http://localhost:3000?" + param;
+    $.ajax({
+      type: "GET",
+      url: serverurl,
+      // dataType: "json"
+    })
+      // Ajaxリクエストが成功した場合
+      .done(function (data) {
+        // $("#result").html(data);
+        datalist = data.split(",")
+        console.log("got:", data)
+        if (datalist[0] != offsetX + "+" + offsetY + "+" + inputElemDepth.value + "+" + inputElemMag.value) {
+          console.log("retry");
+          createFig();
+        }
+        else {
+
+          datalist = datalist.slice(1);
+          console.log("datalist:", datalist);
+          if (!datalist.length) {
+            console.log("Redo")
+            // createFig();
           }
-          else {
+          console.log("running...");
 
-            datalist = datalist.slice(1);
-            console.log("datalist:", datalist);
-            if (!datalist.length) {
-              console.log("Redo")
-              // createFig();
-            }
-            console.log("running...");
+          document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + ") Finished</p>";
+          document.getElementById("fadeLayer").style.visibility = "hidden";
+          document.getElementById("loadingIcon").style.visibility = "hidden";
+          console.log("finished");
+          // test_context.fillText("(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + "), 深さ:" + inputElemDepth.value + "km, マグニチュード:" + inputElemMag.value, 10, 20)
+          // test_context.fillText("(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + "), Depth=" + inputElemDepth.value, ", Mag=" + inputElemMag.value, 0, 0)
+          svg.selectAll("rect").remove();
 
-            document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + ") Finished</p>";
-            document.getElementById("fadeLayer").style.visibility = "hidden";
-            document.getElementById("loadingIcon").style.visibility = "hidden";
-            console.log("finished");
-            test_context.fillText("(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + "), 深さ:" + inputElemDepth.value + "km, マグニチュード:" + inputElemMag.value, 10, 20)
-            // test_context.fillText("(経度,緯度)=(" + pixelXtoLatitude(offsetX) + "," + pixelYtoLongtitude(offsetY) + "), Depth=" + inputElemDepth.value, ", Mag=" + inputElemMag.value, 0, 0)
-            for (var x = 0; x < bitSize; x++) {
-              for (var y = 0; y < bitSize; y++) {
-                let data_i = Number(datalist[y * bitSize + x])
-                if (data_i > 0) {
-                  test_context.fillStyle = myColorList[Math.min(data_i - 1, myColorList.length - 1)];
-                  // test_context.fillStyle = colorRed[data_i + 2];
 
-                  test_context.fillRect(x * gridSize, y * gridSize, gridSize, gridSize);
-                  test_context.font = gridSize - 2 + 'px';
-                  test_context.fillStyle = "black"
-                  test_context.fillText(datalist[y * bitSize + x], x * gridSize, y * gridSize + gridSize)
+
+          for (var x = 0; x < bitSize; x++) {
+            for (var y = 0; y < bitSize; y++) {
+              let data_i = Number(datalist[y * bitSize + x])
+              if (data_i > 0) {
+
+                // >>> show sindo >>>
+
+                var ido = (latitudeSpan / bitSize) * x + 30;
+                var keido = (longtitudeSpan / bitSize) * y + 128;
+                // console.log(projection(getPosOnMap(x, y)));
+                var circle = svg
+                  .append("circle")
+                  .attr("cx", function () {
+                    return projection([keido, ido])[0];
+                    return projection(getPosOnMap(x, y))[0];
+                  })
+                  .attr("cy", function () {
+                    return projection([keido, ido])[1];
+                    return projection(getPosOnMap(x, y))[1];
+                  })
+                  .attr("fill", function () {
+                    return myColorList[Math.min(data_i - 1, myColorList.length - 1)];
+                  })
+                  .attr("r", 5)
+                  .attr("stroke", function () {
+                    return;
+                  })
+                  .attr("stroke-width", 2);
+
+
+
+                // svg
+                //   .selectAll("circle")
+                //   .enter()
+                //   .append("circle")
+                //   // .sort(order)
+                //   // .attr("class", "circle")
+                //   .attr("fill", "red")
+                //   .attr("stroke", "white")
+                //   .attr("cx", function () {
+                //     return projection(getPosOnMap(x, y))[0];
+                //   })
+                //   .attr("cy", function () {
+                //     return projection(getPosOnMap(x, y))[1];
+                //   })
+                //   .attr("r", 20);
+
+
+
+                // circle.on("mouseover", onMouseover).on("mouseout", onMouseout);
+                function order(a, b) {
+                  return true;
                 }
+
+                // <<< show sindo <<<
+
+                // var rect = svg.append("rect")
+                //   .attr("x", x * gridSize) // 開始x座標
+                //   .attr("y", y * gridSize) // 開始y座標
+                //   .attr("width", gridSize) // 横幅
+                //   .attr("height", gridSize) // 縦幅
+                //   .attr("fill", function () {
+                //     return myColorList[Math.min(data_i - 1, myColorList.length - 1)];
+                //   }) // 長方形の中の色
+
+                //   .attr("text", function () {
+                //     return datalist[y * bitSize + x];
+                //   });
+
+                // test_context.fillStyle = myColorList[Math.min(data_i - 1, myColorList.length - 1)];
+                // // test_context.fillStyle = colorRed[data_i + 2];
+
+                // test_context.fillRect(x * gridSize, y * gridSize, gridSize, gridSize);
+                // test_context.font = gridSize - 2 + 'px';
+                // test_context.fillStyle = "black"
+                // test_context.fillText(datalist[y * bitSize + x], x * gridSize, y * gridSize + gridSize)
               }
             }
           }
-          // datalist = []
-        })
-        // Ajaxリクエストが失敗した場合
-        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
-          // alert(errorThrown);
-        });
-    }
-
-    if (mode == "pin" || mode == "run") {
-      // >>> create × on Map >>>
-      let frameSize = (5 + Number(inputElemMag.value)) * 4 + 1
-      const side = 5 + Number(inputElemMag.value)
-      let pinColor = 255 * (1 - Number(inputElemDepth.value) / 2000)
-      var image_data = test_context.createImageData(1, 1);
-      // data[x] in image_data means
-      // x mod 4 switch
-      // 0:r
-      // 1:g
-      // 2:b
-      // 3:alpha
-      image_data.data[0] = pinColor;
-      image_data.data[1] = 0;
-      image_data.data[2] = 0;
-      image_data.data[3] = 255;
-
-      lineThickness = Math.min(3, frameSize / 4)
-      for (var y = 0; y < frameSize; y++) {
-        for (var x = 0; x < frameSize; x++) {
-          if (Math.abs(x - y) <= lineThickness || Math.abs(x + y - frameSize) <= lineThickness) {
-            test_context.putImageData(image_data, gridSize * offsetX + x - side, gridSize * offsetY + y - side);
-          }
         }
-      }
-      // <<< create × on Map <<<
-    }
-  });
-  image.src = imagePath;
+        // datalist = []
+      })
+      // Ajaxリクエストが失敗した場合
+      .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+        // alert(errorThrown);
+      });
+  }
+  console.log(mode);
+
+  if (mode == "pin" || mode == "run") {
+    // >>> create × on Map >>>
+    let frameSize = (5 + Number(inputElemMag.value)) * 4 + 1
+    const side = 5 + Number(inputElemMag.value)
+    let pinColor = 255 * (1 - Number(inputElemDepth.value) / 2000)
+    // var image_data = test_context.createImageData(1, 1);
+    // data[x] in image_data means
+    // x mod 4 switch
+    // 0:r
+    // 1:g
+    // 2:b
+    // 3:alpha
+    // image_data.data[0] = pinColor;
+    // image_data.data[1] = 0;
+    // image_data.data[2] = 0;
+    // image_data.data[3] = 255;
+
+    // lineThickness = Math.min(3, frameSize / 4)
+    // for (var y = 0; y < frameSize; y++) {
+    //   for (var x = 0; x < frameSize; x++) {
+    //     if (Math.abs(x - y) <= lineThickness || Math.abs(x + y - frameSize) <= lineThickness) {
+    //       test_context.putImageData(image_data, gridSize * offsetX + x - side, gridSize * offsetY + y - side);
+    //     }
+    //   }
+    // }
+
+    var remove = svg.selectAll("circle").remove();
+
+
+    var circle = svg
+      .append("circle")
+      .attr("cx", function (event) {
+        console.log(event);
+        return offsetX * gridSize;
+      })
+      .attr("cy", function (d, e) {
+        return offsetY * gridSize;
+      })
+      .attr("r", function () {
+        return 1 + 1.5 * Number(inputElemMag.value);
+      })
+      .attr("fill", "none")
+      .attr("stroke", "red")
+      .attr("stroke-width", 2);
+
+    // <<< create × on Map <<<
+  }
+  // }
+  // )
+  ;
+  // image.src = imagePath;
   console.log("done")
 }
 
@@ -273,4 +367,13 @@ function saveCanvas(canvas_id) {
   a.download = 'EarthquakeData' + 'X' + pixelXtoLatitude(offsetX) + 'Y' + pixelYtoLongtitude(offsetY) + 'Depth' + inputElemDepth.value + 'Mag' + inputElemMag.value + '.jpg';
   //クリックイベントを発生させる
   a.click();
+}
+
+// input x, y (x, y in [0,63])
+// output [ido, keido]
+function getPosOnMap(x, y) {
+  var ido = (longtitudeSpan / bitSize) * x + 30;
+  var keido = (latitudeSpan / bitSize) * y + 128;
+  console.log(ido, keido)
+  return (longtitudeSpan / bitSize) * x + 30, (latitudeSpan / bitSize) * y + 128;
 }
