@@ -1,5 +1,5 @@
 const canvasWidth = 512
-const canvasHeight = 512
+const canvasHeight = 576
 const bitSize = 64
 const gridSize = canvasWidth / bitSize
 
@@ -101,8 +101,8 @@ function pixelYtolatitude(Y) {
 function getPosition(e) {
   offsetX = e.offsetX;
   offsetY = e.offsetY;
-  offsetX = Math.floor(offsetX / gridSize)
-  offsetY = Math.floor(offsetY / gridSize)
+  offsetX = Math.floor(offsetX / 8)
+  offsetY = Math.floor(offsetY / 9)
   createFig(mode = "pin")
   console.log(offsetX, offsetY, Number(inputElemDepth.value), Number(inputElemMag.value))
   document.getElementById('currentXY').innerHTML = "<p>(経度,緯度)=(" + pixelXtolongtitude(offsetX) + "," + pixelYtolatitude(offsetY) + ")</p>";
@@ -111,7 +111,7 @@ function getPosition(e) {
 
 // 現在の値をspanに埋め込む関数
 const setCurrentValue = (val1, val2) => {
-  currentValueDepth.innerText = val;
+  currentValueDepth.innerText = val1;
   currentValueMag.innerText = val2;
 }
 
@@ -208,7 +208,7 @@ function createFig(mode = "run") {
           console.log("finished");
           // test_context.fillText("(経度,緯度)=(" + pixelXtolongtitude(offsetX) + "," + pixelYtolatitude(offsetY) + "), 深さ:" + inputElemDepth.value + "km, マグニチュード:" + inputElemMag.value, 10, 20)
           // test_context.fillText("(経度,緯度)=(" + pixelXtolongtitude(offsetX) + "," + pixelYtolatitude(offsetY) + "), Depth=" + inputElemDepth.value, ", Mag=" + inputElemMag.value, 0, 0)
-          svg.selectAll("rect").remove();
+          // svg.selectAll("rect").remove();
 
 
 
@@ -219,8 +219,8 @@ function createFig(mode = "run") {
 
                 // >>> show sindo >>>
 
-                var ido = (latitudeSpan / bitSize) * (bitSize - y) + 30;
-                var keido = (longtitudeSpan / bitSize) * x + 128;
+                var ido = (latitudeSpan / bitSize) * (bitSize - y) + 30 + latitudeSpan / bitSize / 2;
+                var keido = (longtitudeSpan / bitSize) * x + 128 + longtitudeSpan / bitSize / 2;
                 // console.log(projection(getPosOnMap(x, y)));
                 var circle = svg
                   .append("circle")
@@ -233,11 +233,23 @@ function createFig(mode = "run") {
                   .attr("fill", function () {
                     return myColorList[Math.min(data_i - 1, myColorList.length - 1)];
                   })
-                  .attr("r", 5)
+                  .attr("r", 4)
                   .attr("stroke", function () {
                     return;
                   })
                   .attr("stroke-width", 2);
+                svg
+                  .append("text")
+                  .attr("x", function () {
+                    return projection([keido, ido])[0] - 2;
+                  })
+                  .attr("y", function () {
+                    return projection([keido, ido])[1];
+                  })
+                  .attr("dominant-baseline", "middle")
+                  .text(data_i)
+                  .attr("font-size", 7.5)
+                  ;
 
 
 
@@ -326,16 +338,17 @@ function createFig(mode = "run") {
     // }
 
     var remove = svg.selectAll("circle").remove();
+    svg.selectAll("text").remove();
 
 
     var circle = svg
       .append("circle")
       .attr("cx", function (event) {
         console.log(event);
-        return offsetX * gridSize;
+        return offsetX * 8 + 4;
       })
       .attr("cy", function (d, e) {
-        return offsetY * gridSize;
+        return offsetY * 9 + 4.5;
       })
       .attr("r", function () {
         return 1 + 1.5 * Number(inputElemMag.value);

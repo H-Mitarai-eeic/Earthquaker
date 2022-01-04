@@ -61,7 +61,7 @@ html input[type="range"] {
   outline: 0;
   border: 0;
   border-radius: 500px;
-  width: 300px;
+  width: 350px;
   max-width: 100%;
   margin: 10px 0 16px;
   transition: box-shadow 0.2s ease-in-out;
@@ -177,7 +177,7 @@ input:not(:active) + #h4-container h4 {
   border-radius: 20px;
   border: 2px solid rgb(0, 202, 199);
   background: rgb(0, 202, 199);
-  font-size: 120%;
+  font-size: 110%;
 }
 .css-button-fully-rounded--red:hover {
   background: #fff;
@@ -198,6 +198,7 @@ input:not(:active) + #h4-container h4 {
   border: 2px solid rgb(0, 202, 199);
   background: rgb(0, 202, 199);
   font-size: 150%;
+  margin-bottom: 10px;
 }
 #buttonRun:hover {
   background: #fff;
@@ -252,8 +253,8 @@ input:not(:active) + #h4-container h4 {
   width: 80px;
   height: 80px;
   position: relative;
-  left: 280px;
-  top: -360px;
+  left: 220px;
+  top: -500px;
   animation: sk-chase 2.5s infinite linear both;
 }
 
@@ -336,3 +337,12 @@ input:not(:active) + #h4-container h4 {
     transform: scale(1);
   }
 }
+
+/* #test_canvas {
+  position: absolute;
+  top: 10px;
+}
+#presets {
+  position: absolute;
+  top: 606px;
+} */
