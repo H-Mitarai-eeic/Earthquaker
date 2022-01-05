@@ -169,6 +169,56 @@ function createFig(mode = "run") {
   // ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
   console.log("load!");
 
+  if (mode == "pin" || mode == "run") {
+    // >>> create × on Map >>>
+    let frameSize = (5 + Number(inputElemMag.value)) * 4 + 1
+    const side = 5 + Number(inputElemMag.value)
+    let pinColor = 255 * (1 - Number(inputElemDepth.value) / 2000)
+    // var image_data = test_context.createImageData(1, 1);
+    // data[x] in image_data means
+    // x mod 4 switch
+    // 0:r
+    // 1:g
+    // 2:b
+    // 3:alpha
+    // image_data.data[0] = pinColor;
+    // image_data.data[1] = 0;
+    // image_data.data[2] = 0;
+    // image_data.data[3] = 255;
+
+    // lineThickness = Math.min(3, frameSize / 4)
+    // for (var y = 0; y < frameSize; y++) {
+    //   for (var x = 0; x < frameSize; x++) {
+    //     if (Math.abs(x - y) <= lineThickness || Math.abs(x + y - frameSize) <= lineThickness) {
+    //       test_context.putImageData(image_data, gridSize * offsetX + x - side, gridSize * offsetY + y - side);
+    //     }
+    //   }
+    // }
+
+    svg.selectAll("circle").remove();
+    svg.selectAll("text").remove();
+
+
+    var circle = svg
+      .append("circle")
+      .attr("cx", function (event) {
+        console.log(event);
+        return offsetX * 8 + 4;
+      })
+      .attr("cy", function (d, e) {
+        return offsetY * 9 + 4.5;
+      })
+      .attr("r", function () {
+        return 1 + 1.5 * Number(inputElemMag.value);
+      })
+      .attr("fill", "none")
+      .attr("stroke", "red")
+      .attr("stroke-width", 2);
+
+    // <<< create × on Map <<<
+  }
+
+
   if (mode == "run") {
 
 
@@ -210,6 +260,16 @@ function createFig(mode = "run") {
           // test_context.fillText("(経度,緯度)=(" + pixelXtolongtitude(offsetX) + "," + pixelYtolatitude(offsetY) + "), Depth=" + inputElemDepth.value, ", Mag=" + inputElemMag.value, 0, 0)
           // svg.selectAll("rect").remove();
 
+          svg
+            .append("text")
+            .attr("x", 10)
+            .attr("y", 25)
+            // .attr("dominant-baseline", "middle")
+            .text('(緯度,経度)=(' + pixelXtolongtitude(offsetX) + ',' + pixelYtolatitude(offsetY) + ') 震源:' + inputElemDepth.value + 'km マグニチュード:' + inputElemMag.value)
+            .attr("font-size", 13)
+            .attr("fill", "white")
+            ;
+
 
 
           for (var x = 0; x < bitSize; x++) {
@@ -238,6 +298,8 @@ function createFig(mode = "run") {
                     return;
                   })
                   .attr("stroke-width", 2);
+
+
                 svg
                   .append("text")
                   .attr("x", function () {
@@ -311,54 +373,7 @@ function createFig(mode = "run") {
   }
   console.log(mode);
 
-  if (mode == "pin" || mode == "run") {
-    // >>> create × on Map >>>
-    let frameSize = (5 + Number(inputElemMag.value)) * 4 + 1
-    const side = 5 + Number(inputElemMag.value)
-    let pinColor = 255 * (1 - Number(inputElemDepth.value) / 2000)
-    // var image_data = test_context.createImageData(1, 1);
-    // data[x] in image_data means
-    // x mod 4 switch
-    // 0:r
-    // 1:g
-    // 2:b
-    // 3:alpha
-    // image_data.data[0] = pinColor;
-    // image_data.data[1] = 0;
-    // image_data.data[2] = 0;
-    // image_data.data[3] = 255;
 
-    // lineThickness = Math.min(3, frameSize / 4)
-    // for (var y = 0; y < frameSize; y++) {
-    //   for (var x = 0; x < frameSize; x++) {
-    //     if (Math.abs(x - y) <= lineThickness || Math.abs(x + y - frameSize) <= lineThickness) {
-    //       test_context.putImageData(image_data, gridSize * offsetX + x - side, gridSize * offsetY + y - side);
-    //     }
-    //   }
-    // }
-
-    var remove = svg.selectAll("circle").remove();
-    svg.selectAll("text").remove();
-
-
-    var circle = svg
-      .append("circle")
-      .attr("cx", function (event) {
-        console.log(event);
-        return offsetX * 8 + 4;
-      })
-      .attr("cy", function (d, e) {
-        return offsetY * 9 + 4.5;
-      })
-      .attr("r", function () {
-        return 1 + 1.5 * Number(inputElemMag.value);
-      })
-      .attr("fill", "none")
-      .attr("stroke", "red")
-      .attr("stroke-width", 2);
-
-    // <<< create × on Map <<<
-  }
   // }
   // )
   ;
@@ -368,18 +383,24 @@ function createFig(mode = "run") {
 
 createFig(mode = "init")
 
-function saveCanvas(canvas_id) {
-  // var canvas = document.getElementById(canvas_id);
-  //アンカータグを作成
-  var a = document.createElement('a');
-  //canvasをJPEG変換し、そのBase64文字列をhrefへセット
-  a.href = canvas.toDataURL('image/jpeg', 0.85);
-  //ダウンロード時のファイル名を指定
-  a.download = 'EarthquakeData' + 'X' + pixelXtolongtitude(offsetX) + 'Y' + pixelYtolatitude(offsetY) + 'Depth' + inputElemDepth.value + 'Mag' + inputElemMag.value + '.jpg';
-  //クリックイベントを発生させる
-  a.click();
-}
+function downloadPNG() {
+  var svg = document.querySelector("svg");
+  var svgData = new XMLSerializer().serializeToString(svg);
+  var canvas = document.createElement("canvas");
+  canvas.width = svg.width.baseVal.value;
+  canvas.height = svg.height.baseVal.value;
 
+  var ctx = canvas.getContext("2d");
+  var image = new Image;
+  image.onload = function () {
+    ctx.drawImage(image, -5, -5);
+    var a = document.createElement("a");
+    a.href = canvas.toDataURL("image/png");
+    a.setAttribute("download", 'EarthquakeData' + 'X' + pixelXtolongtitude(offsetX) + 'Y' + pixelYtolatitude(offsetY) + 'Depth' + inputElemDepth.value + 'Mag' + inputElemMag.value + '.png');
+    a.dispatchEvent(new MouseEvent("click"));
+  }
+  image.src = "data:image/svg+xml;charset=utf-8;base64," + btoa(unescape(encodeURIComponent(svgData)));
+}
 // input x, y (x, y in [0,63])
 // output [ido, keido]
 function getPosOnMap(x, y) {
