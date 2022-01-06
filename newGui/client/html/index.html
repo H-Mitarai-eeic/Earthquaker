@@ -31,14 +31,7 @@
     </div>
 
     <h2>震源の深さ <span id="currentDepth"></span>km</h2>
-    <input
-      type="range"
-      min="0"
-      max="1000"
-      step="1"
-      value="50"
-      id="inputDepth"
-    />
+    <input type="range" min="0" max="700" step="1" value="50" id="inputDepth" />
     <div id="h4-container">
       <div id="h4-subcontainer">
         <h4 id="h4Depth"><span></span></h4>
@@ -166,10 +159,10 @@
 
   <script>
     $(function () {
-      var rangePercent = $('[id="inputDepth"]').val() / 10;
+      var rangePercent = $('[id="inputDepth"]').val() / 7;
       $('[id="inputDepth"]').on("change input", function () {
-        rangePercent = $('[id="inputDepth"]').val() / 10;
-        $("h4").html(rangePercent * 10 + "<span></span>");
+        rangePercent = $('[id="inputDepth"]').val() / 7;
+        $("h4").html($('[id="inputDepth"]').val() + "<span></span>");
         $('[id="inputDepth"], h4>span').css(
           "filter",
           "hue-rotate(-" + rangePercent / 2 + "deg)"
